@@ -1,0 +1,21 @@
+services:
+  # pytorch 24.01-py3
+  pt0: &pt0
+    image: quant_user/docker-pytorch:24.06-py3
+    build:
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    shm_size: '8g'
+    volumes:
+      - .:/app
+      - $HOME/.cache:/root/.cache
+      - $HOME/.ipython:/root/.ipython
+      - $HOME/.zsh_history:/root/.zsh_history
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia # selenium (chrome)'s gpu acceleration
+              device_ids: [ "0" ]
+              capabilities: [ gpu ]
